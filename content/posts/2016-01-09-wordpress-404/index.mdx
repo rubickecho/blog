@@ -19,7 +19,7 @@ cd /etc/apache2/mods-enabled目录，ls -ltr 发现rewrite.load是日期最新�
 * 方法2. 进入apache的httpd.conf，在其中搜索AllowOverride，找到，将None改为All，保存退出。重启apache。
 
 仔细确认之后，发现自己的apache2文件夹中根本没有以上方法中说的文件，最终确定在apache2.conf中找到了AllowOverride，此时按照网上方法将None更改为All（全部更改）
-{% highlight shell %}
+```
 <Directory />
     Options FollowSymLinks
     AllowOverride All
@@ -36,7 +36,7 @@ cd /etc/apache2/mods-enabled目录，ls -ltr 发现rewrite.load是日期最新�
         AllowOverride All
         Require all granted
 </Directory>
-{% endhighlight %}
+```
 此时打印出phpinfo，发现apache已经开启了rewrite模块，更改了固定链接之后也能正确跳转到文章。
 
 

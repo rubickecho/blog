@@ -14,9 +14,9 @@ categories:
 
 ### 一.mac自带php安装phpredis
 
-{% highlight shell %}
+```
 $ brew install php56-redis  #56为php版本5.6.10
-{% endhighlight %}
+```
 
 ### 二.mac下mamp安装phpredis
 
@@ -24,7 +24,7 @@ $ brew install php56-redis  #56为php版本5.6.10
 
     2. 进入phpredis文件夹：
 
-    {% highlight shell %}
+    ```
     $ cd phpredis
     $ sudo phpize
     $ sudo ./configure --with-php-config=/Applications/MAMP/bin/php/php5.6.10/bin/php-config  #配置phpredis
@@ -32,7 +32,7 @@ $ brew install php56-redis  #56为php版本5.6.10
     $ sudo cp -p modules/redis.so /Applications/MAMP/bin/php/php5.6.10/lib/php/extensions/no-debug-non-zts-20131226 #将编译完成的模块，复制到MAMP 中的PHP 扩展中
     $ sudo vi /Applications/MAMP/bin/php/php5.6.10/conf/php.ini
     $ extension=redis.so    #修改 php.ini 文件在增加 redis.so 扩展
-    {% endhighlight %}
+    ```
     3. 最后完成，重启MAMP
 
 ![reids模块]({{ site.url }}/images/posts/phpredis.png)

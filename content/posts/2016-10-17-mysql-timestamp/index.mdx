@@ -35,7 +35,7 @@ MySQL目前不支持列的Default 为函数的形式,如达到你某列的默认
 TIMESTAMP值可以从1970的某时的开始一直到2037年，精度为一秒，其值作为数字显示。
 
 TIMESTAMP值显示尺寸的格式如下表所示：
-{% highlight shell %}
+```
 +---------------+----------------+
 | 列类型　　　　| 显示格式　　　 |
 | TIMESTAMP(14) | YYYYMMDDHHMMSS |　
@@ -46,7 +46,7 @@ TIMESTAMP值显示尺寸的格式如下表所示：
 | TIMESTAMP(4)　| YYMM　　　　　 |
 | TIMESTAMP(2)　| YY　　　　　　 |
 +---------------+----------------+
-{% endhighlight %}	
+```	
 “完整”TIMESTAMP格式是14位，但TIMESTAMP列也可以用更短的显示尺寸，创造最常见的显示尺寸是6、8、12、和14。
 
 你可以在创建表时指定一个任意的显示尺寸，但是定义列长为0或比14大均会被强制定义为列长14。
@@ -79,7 +79,7 @@ TIMESTAMP(5) ->　TIMESTAMP(6)
 
 
 **例如你可以使用下列语句来验证：**
-{% highlight shell %}
+```
 CREATE TABLE test ('id' INT (3) UNSIGNED AUTO_INCREMENT, 'date1'
 TIMESTAMP (8) PRIMARY KEY('id'));
 INSERT INTO test SET id = 1;
@@ -96,7 +96,7 @@ SELECT * FROM test;
 +----+----------------+
 |　1 | 20021114093723 |
 +----+----------------+
-{% endhighlight %}	
+```	
 你可以使用TIMESTAMP列类型自动地用当前的日期和时间标记INSERT或UPDATE的操作。
 
 如果你有多个TIMESTAMP列，只有第一个自动更新。自动更新第一个TIMESTAMP列在下列任何条件下发生：
@@ -107,7 +107,7 @@ SELECT * FROM test;
 4. 除第一个以外的TIMESTAMP列也可以设置到当前的日期和时间，只要将列设为NULL，或NOW()。
 
 ---
-{% highlight shell %}
+```
 CREATE TABLE test ( 
 'id' INT (3) UNSIGNED AUTO_INCREMENT,
 'date1' TIMESTAMP (14),
@@ -122,11 +122,11 @@ INSERT INTO test SET id= 2;
 |　1 | 20021114093723 | 20021114093723 |
 |　2 | 20021114093724 | 00000000000000 |
 +----+----------------+----------------+
-{% endhighlight %}	
+```	
 第一条指令因设date1、date2为NULL,所以date1、date2值均为当前时间第二条指令因没有设date1、date2列值，第一个TIMESTAMP列date1为更新为当前时间，而二个TIMESTAMP列date2因日期不合法而变为“00000000000000”
 
 ---
-{% highlight shell %}
+```
 UPDATE test SET id= 3 WHERE id=1;
 +----+----------------+----------------+
 | id | date1　　　　　| date2　　　　　|
@@ -134,11 +134,11 @@ UPDATE test SET id= 3 WHERE id=1;
 |　3 | 20021114094009 | 20021114093723 |
 |　2 | 20021114093724 | 00000000000000 |
 +----+----------------+----------------+
-{% endhighlight %}	
+```	
 这条指令没有明确地设定date2的列值，所以第一个TIMESTAMP列date1将被更新为当前时间
 
 ---
-{% highlight shell %}
+```
 UPDATE test SET id= 1,date1=date1,date2=NOW() WHERE id=3; 
 +----+----------------+----------------+
 | id | date1　　　　　| date2　　　　　|
@@ -146,17 +146,17 @@ UPDATE test SET id= 1,date1=date1,date2=NOW() WHERE id=3;
 |　1 | 20021114094009 | 20021114094320 |
 |　2 | 20021114093724 | 00000000000000 |
 +----+----------------+----------------+
-{% endhighlight %}	
+```	
 这条指令因设定date1=date1，所以在更新数据时date1列值并不会发生改变而因设定date2=NOW()，所以在更新数据时date2列值会被更新为当前时间此指令等效为：
 
 ---
-{% highlight shell %}
+```
 UPDATE test SET id= 1,date1=date1,date2=NULL WHERE id=3;
-{% endhighlight %}	
+```	
 因MySQL返回的 TIMESTAMP 列为数字显示形式，你可以用DATE_FROMAT()函数来格式化 TIMESTAMP 列，如下所示：
 
 ---
-{% highlight shell %}
+```
 SELECT id,DATE_FORMAT(date1,'%Y-%m-%d %H:%i:%s') As date1,
 DATE_FORMAT(date2,'%Y-%m-%d %H:%i:%s') As date2 FROM test;
 +----+---------------------+---------------------+
@@ -173,7 +173,7 @@ DATE_FORMAT(date2,'%Y-%m-%d') As date2 FROM test;
 |　1 | 2002-11-14　| 2002-11-14　|
 |　2 | 2002-11-14　| 0000-00-00　|
 +----+-------------+-------------+
-{% endhighlight %}	
+```	
 在某种程度上，你可以把一种日期类型的值赋给一个不同的日期类型的对象。
 然而，而尤其注意的是：值有可能发生一些改变或信息的损失：
  
