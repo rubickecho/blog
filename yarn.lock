@@ -6559,6 +6559,14 @@ gatsby-plugin-google-analytics@^4.16.0:
     minimatch "3.0.4"
     web-vitals "^1.1.2"
 
+gatsby-plugin-google-gtag@^4.17.0:
+  version "4.17.0"
+  resolved "https://registry.npmjs.org/gatsby-plugin-google-gtag/-/gatsby-plugin-google-gtag-4.17.0.tgz#67d2a864a0589a87e880ffdb275979df059ad346"
+  integrity sha512-m/KV28ob7+DBVQY2emI25jjZOl7E/eRxxLNH0XHSXPG/x8lyBrHJ2dGqlJ0lK18N/WE0c+pzQORWii8SZV5SVA==
+  dependencies:
+    "@babel/runtime" "^7.15.4"
+    minimatch "^3.1.2"
+
 gatsby-plugin-manifest@^4.12.1:
   version "4.16.0"
   resolved "https://registry.npmjs.org/gatsby-plugin-manifest/-/gatsby-plugin-manifest-4.16.0.tgz#84549aa6e11f85351ccb274aaa9f692b7a8dc286"
