@@ -3,11 +3,12 @@ author: tangliangcheng
 comments: true
 date: 2016-01-13 06:42:02+00:00
 layout: post
-link: http://www.rmogo.com/wordpress/2016/01/13/html5%e5%a4%8d%e4%b9%a0%e5%b0%8f%e7%bb%93/
 slug: learn-html5
-title: HTML5学习小结
+title: HTML5 学习小结
 wordpress_id: 118
-excerpt: HTML5初学习小结和一些小demo。
+excerpt: HTML5 初学习小结和一些小demo
+tags:
+  - HTML
 categories:
 - 技术分享
 ---
@@ -34,14 +35,14 @@ categories:
 **实例：绘制一个三角形**
 
 html代码
-{% highlight html %}
+```html
 <body>
     <canvas id="canvas"></canvas>
 </body>
 ```
 
 js代码
-{% highlight javascript %}
+```js
 window.onload = function(){
   var canvas =  document.getElementById("canvas");
   canvas.width = 800;
@@ -56,7 +57,7 @@ window.onload = function(){
   context.stroke();
 };
 ```
-![ 1.png](http://upload-images.jianshu.io/upload_images/1429486-e1df180649622f1b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![1.png](./1.png)
 
 
 **绘制矩形**
@@ -86,7 +87,7 @@ cp1x,cp1y和cp2x,cp2y分别代表
 两个控制点。
 
 **实例1：绘制一个五角星**
-{% highlight javascript %}
+```js
 window.onload = function() {
     var canvas = document.getElementById("canvas");
     var context = canvas.getContext('2d');
@@ -107,11 +108,11 @@ function drawStar(context, x, y, R, r, width, color, rotation) {
 }
 ```
 
-![2.png](http://upload-images.jianshu.io/upload_images/1429486-d0eaf643294c41d6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![2.png](2.png)
 
 
 **实例2:绘制宝马标志**
-{% highlight javascript %}
+```js
 window.onload = function() {
     var canvas = document.getElementById("canvas");
     canvas.width = 800;
@@ -185,7 +186,7 @@ function drawBigRound(context, x, y, r, addr, color, lineWidth) {
 }
 
 ``` 
-![bm.png](http://upload-images.jianshu.io/upload_images/1429486-d62aee86aa095730.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![bmw.png](3.png)
 
 
 
@@ -229,7 +230,7 @@ function drawBigRound(context, x, y, r, addr, color, lineWidth) {
 * transition-timing-function   规定速度效果的速度曲线。
 * transition-delay     定义过渡效果何时开始。
 
-{% highlight css %}
+```css
 div
 {
     width:100px;
