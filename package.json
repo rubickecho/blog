@@ -14,7 +14,8 @@
     "start": "gatsby develop",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
-    "docker:dev": "docker-compose up"
+    "docker:dev": "docker-compose up",
+    "commit": "npx git-cz"
   },
   "dependencies": {
     "@lekoarts/gatsby-theme-minimal-blog": "^4.0.0",
