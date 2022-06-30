@@ -1,0 +1,263 @@
+---
+title: JavaScript系列-原型链继承
+date: 2022-06-30
+defer: false
+tags: ["JavaScript"]
+---
+
+# 继承
+
+- Created: November 30, 2021 10:10 PM
+- Update: March 14, 2022 10:39 PM
+- 分类: JavaScript
+- 可参考文章
+    - https://github.com/mqyqingfeng/Blog/issues/16
+    - https://developer.mozilla.org/zh-CN/docs/Learn/JavaScript/Objects/Inheritance
+    - https://javascript.info/prototype-inheritance
+    - https://javascript.info/class-inheritance
+- 学习状态: Yes
+- 学习进度: 已复习
+- 模块: 前端基础
+
+# 实现继承有哪些方式？优缺点是什么？
+
+### 原型链继承
+
+```jsx
+// 原型继承
+
+function animal() {
+    this.name = 'animal';
+    this.colors = ['red', 'blue', 'green'];
+}
+
+animal.prototype.getName = function() {
+    return this.name;
+}
+
+function dog() {
+}
+
+dog.prototype = new animal();
+
+const dog1 = new dog();
+console.log('dog1.name:', dog1.getName()); // animal
+console.log('dog1.colors:', dog1.colors); // ['red', 'blue', 'green']
+
+dog1.name = 'dog';
+dog1.colors.push('black'); // 引用类型的值会共享
+const dog2 = new dog();
+console.log('dog2.name:', dog2.getName()); // animal
+console.log('dog2.colors:', dog2.colors); // ['red', 'blue', 'green', 'black']
+```
+
+缺点：
+
+- 引用类型的值会共享
+- 不能传递参数
+
+### 构造函数继承（经典继承）
+
+```jsx
+(() => {
+	// 构造函数继承
+
+	function animal(name) {
+		this.name = name;
+		this.colors = ["red", "blue", "green"];
+
+        this.getName = function () {
+            return this.name;
+        };
+	}
+
+    animal.prototype.getColors = function() {
+        console.log('animal.prototype.getColors:', this.colors)
+    }
+
+	function dog(name) {
+        // 可以传参
+        // 借调 animal 的构造函数，每个实例都会拥有 animal 的属性和方法
+		animal.call(this, name);
+	}
+
+	const dog1 = new dog('teddy');
+	dog1.colors.push("black");
+	console.log("dog1 getName:", dog1.getName()); // teddy
+	// console.log("dog1 getColors:", dog1.getColors()); // dog1.getColors is not a function
+	console.log("dog1.colors:", dog1.colors); // ['red', 'blue', 'green', 'black']
+
+	const dog2 = new dog('labrador');
+	console.log("dog2.name:", dog2.getName()); // labrador
+	console.log("dog2.colors:", dog2.colors); // ['red', 'blue', 'green']
+
+	// 因为 dog1, dog2 是不同的实例，即有不同的 name, colors, getName 等
+})();
+```
+
+优点:
+
+- 可以传参数
+- 避免引用类型被其他实例共享
+
+缺点:
+
+- 只能继承父类的实例属性和方法，不能继承原型属性/方法
+- 无法实现复用，每个子类都有父类实例函数的副本，影响性能
+
+### 原型链+构造函数（组合继承/伪经典继承）
+
+是目前比较主流的继承方式
+
+```jsx
+(() => {
+	// 组合继承
+
+	function animal(name) {
+		this.name = name;
+		this.colors = ["red", "blue", "green"];
+	}
+
+	animal.prototype.getName = function () {
+		return this.name;
+	};
+
+	function dog(name) {
+        // 可以传参
+        // 借调 animal 的构造函数，每个其实例都会拥有 animal 的属性和方法
+		animal.call(this, name); // 构造函数第一次
+	}
+
+	dog.prototype = new animal(); // 原型链第二次
+
+	const dog1 = new dog('teddy');
+	dog1.colors.push("black");
+	console.log("dog1.name:", dog1.getName()); // teddy
+	console.log("dog1.colors:", dog1.colors); // ['red', 'blue', 'green', 'black']
+
+	const dog2 = new dog('labrador');
+	console.log("dog2.name:", dog2.getName()); // labrador
+	console.log("dog2.colors:", dog2.colors); // ['red', 'blue', 'green']
+})();
+```
+
+优点：
+
+- 融合原型链继承和构造函数继承的优点，同时继承父类属性和方法，和其他实例不共享
+
+缺点:
+
+- 调用两次超类型, 存在两份相同的属性/方法,实例和原型上各有一份
+
+### **原型式继承**
+
+```jsx
+// 原型式继承
+
+function object(o) {
+    // 定义一个方法
+    function F() {};
+
+    // 方法原型执行传入对象
+    F.prototype = o;
+   
+    // 返回方法实例
+    return new F();
+}
+
+const user = {
+    name: 'jack',
+    food: ['apple', 'banana', 'orange'],
+}
+
+const o1 = object(user);
+
+console.log('o1.name:', o1.name); // jack
+console.log('o1.food:', o1.food); // ['apple', 'banana', 'orange']
+
+const o2 = object(user);
+o2.name = 'tom';
+o2.food.push('pear');
+console.log('o2.name:', o2.name); // jack
+console.log('o2.food:', o2.food); // ['apple', 'banana', 'orange', 'pear']
+
+// 共享
+console.log('o1.food:', o1.food); // ['apple', 'banana', 'orange', 'pear']
+```
+
+缺点：
+
+- 引用类型实例共享，与原型链继承一样
+
+### **寄生式继承**
+
+创建一个仅用于封装继承过程的函数，该函数在内部以某种形式来做增强对象，最后返回对象
+
+```jsx
+function createObj (o) {
+    // 创建克隆对象（副本）
+    var clone = Object.create(o);
+    // 增强对象
+    clone.sayName = function () {
+        console.log('hi');
+    }
+
+    // 返回对象
+    return clone;
+}
+```
+
+缺点
+
+- 跟借用构造函数模式一样，每次创建对象都会创建一遍方法
+
+### **寄生组合式继承**
+
+> 不必为了指定子类型的原型而调用超类型的构造函数，我们所需要的无非就是超类型原型的一个副本而已。本质上，就是使用寄生式继承来继承超类型的原型，然后再将结果指定给子类型的原型——泽卡斯(Zakas. Nicholas C.). JavaScript高级程序设计(第3版) (图灵程序设计丛书) (Chinese Edition) (Kindle 位置 6277-6278). 人民邮电出版社. Kindle 版本.
+> 
+
+```jsx
+// 寄生组合式
+
+function object(o) {
+    function F() {}
+    F.prototype = o;
+    return new F();
+}
+
+function prototype(child, parent) {
+    var prototype = object(parent.prototype); // 创建对象，继承属性和方法
+    prototype.constructor = child; // 增强对象
+    child.prototype = prototype; // 指定对象
+}
+
+// 当我们使用的时候：
+prototype(Child, Parent);
+```
+
+优点:
+
+- 只调用一次父类构造函数
+- 没有多余的属性，原型链保持不变
+
+# 可以应用在哪些开发场景中？
+
+- react 中的 extend
+- vue extend
+
+# 面试可能问？
+
+- **[说一下 JavaScript 继承都有哪些方法](https://github.com/lgwebdream/FE-Interview/issues/336)?**
+    - 原型链继承
+    - 构造函数继承（经典继承）
+    - 组合继承（伪经典继承）
+    - 原型式继承
+    - 寄生式继承
+    - 寄生组合式继承
+- 怎样避免原型链上的对象共享？
+    
+    * 经典继承、组合继承、寄生式继承、寄生组合式继承
+    
+    即
+    
+    构造函数继承 或 组合使用
