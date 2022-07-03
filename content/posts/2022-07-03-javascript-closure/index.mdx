@@ -1,0 +1,177 @@
+---
+title: JavaScript系列-闭包
+date: 2022-07-03
+description: 闭包是什么？函数的执行流程是怎样的?
+defer: false
+tags: [JavaScript]
+---
+
+# 闭包
+
+- Created: November 30, 2021 10:11 PM
+- Update: March 14, 2022 11:00 PM
+- 分类: JavaScript
+- 可参考文章: 
+  - https://github.com/mqyqingfeng/Blog/issues/9
+  - https://ui.dev/ultimate-guide-to-execution-contexts-hoisting-scopes-and-closures-in-javascript/?spm=ata.13261165.0.0.2d8e16798YR8lw
+- 学习状态: Yes
+- 学习进度: 已复习
+- 模块: 前端基础
+
+# 闭包是什么?
+
+```jsx
+var scope = "global scope";
+function checkscope(){
+    var scope = "local scope";
+    function f(){
+        return scope;
+    }
+    return f;
+}
+
+var foo = checkscope();
+foo();
+```
+
+执行流程
+
+- 进入全局环境，创建全局上下文，将全局上下文压入上下文执行栈
+- 初始化全局上下文
+- 开始执行 `checkscope` 函数
+- 创建 `checkscope` 上下文，初始化变量环境（VO）、作用域链、this，将 `checkscope` 上下文压入上下文执行栈中
+- 初始化 `checkscope` 上下文，变量环境（VO）、作用域链、this
+- 执行完成，将 `checkscope` 弹出执行上下文栈
+- 开始执行 f 函数
+- 创建 f 函数上下文，将 f 函数上下文压入上下文执行栈中
+- 初始化 f 函数上下文 变量环境（VO）、作用域链、this
+- 执行完成，将 f 函数弹出执行上下文栈（输出 local scope）
+
+## 问题
+
+### 在执行 f 函数的时候，checkscope 函数的上下文已经销毁，如何访问的其变量呢？
+
+作用域链，对于 f 函数来说，其维护的作用域链为
+
+```jsx
+fContext = {
+  Scope: [AO, checkscope.AO, f.VO]
+}
+```
+
+保存在内存中，所以即使 checkscope 被销毁，还是可以通过作用域链找到它维护的变量环境，并使用
+
+# 面试可能问？
+
+- 下面这段代码输出什么？为什么？
+    
+    ```jsx
+    var data = [];
+    
+    for (var i = 0; i < 3; i++) {
+      data[i] = function () {
+        console.log(i);
+      };
+    }
+    
+    data[0]();
+    data[1]();
+    data[2]();
+    ```
+    
+    - 答案
+        
+        输出：3
+        
+- **[第 11 题：对闭包的看法，为什么要用闭包？说一下闭包原理以及应用场景](https://github.com/lgwebdream/FE-Interview/issues/17)**
+    
+    * 什么是闭包？
+    
+    函数执行后返回结果是一个内部函数，并被外部变量所引用，如果内部函数有访问执行函数作用域的变量，既形成了闭包
+    
+    闭包会将函数中变量存储在内存中，会对内存有消耗，所以不能滥用闭包，否则会影响网页性能，造成内存泄漏；当不需要使用闭包时，要及时释放内存，将内层函数对象的变量复制为 null
+    
+    闭包原理？
+    
+    函数执行分成两个阶段（预编译阶段、执行阶段）
+    
+    - 在预编译阶段，如果发现内部函数使用了外部函数的变量，则会在内存中创建一个“闭包”对象并保存对应变量值，如果已存在闭包，则只需要添加对应属性
+    - 执行完成后，函数执行上下文被销毁，函数对“闭包”对象的引用也被销毁，但其内部函数还持有该闭包的引用，所以可以继续访问
+    
+    利用了函数作用域链的特性，一个函数内部定义的函数会将包含外部函数的 AO（活动对象）添加到他的作用域链中，函数执行完毕，其执行作用域链被销毁，但是因为内部函数的作用域链仍在引用该 AO，所以该 AO 不会被销毁，知道内部函数销毁后才被销毁
+    
+    优点？
+    
+    - 内部函数可以很方便访问外部函数作用域中的变量
+    - 避免变量全局污染
+    - 变量保存到独立的作用域，作为私有成员存在
+    
+    缺点？
+    
+    - 对内存有压力，垃圾回收无法回收，会增加内存使用，甚至内存泄漏
+    - 对处理速度有影响，闭包的层级决定了引用的外部变量在查找时，经过的作用域链长度
+    - 可能获取到意外的值（captured value）
+    
+    应用场景
+    
+    - 模块封装。早期的一些JS包，为避免全局变量污染
+        
+        ```jsx
+        var DemoPlugin = (function() {
+          // 声明模块私有变量，外部无法直接访问
+          var name = 'jack'
+          function DemoPlugin () {}
+          DemoPlugin.prototype.getName = function getName() {
+            return name;
+          }
+        
+          return DemoPlugin;
+        })
+        ```
+        
+    - 防抖、节流
+    - 自执行函数 IIFE
+        
+        ```jsx
+        var name = 'jack'
+        (() => {
+          console.log('name:', jack)
+        })()
+        ```
+        
+    - vue 数据响应式 Observer 中使用闭包
+    - ......
+- 以最小的改动解决以下代码的错误(可以使用ES6)
+    
+    ```jsx
+    const obj = {
+      name:"jsCoder",
+      skill:["es6","react","angular"],
+      say:function(){
+        for(var i = 0,len = this.skill.length;i<len;i++){
+          setTimeout(function(){
+            console.log('No.' + i + this.name);
+            console.log(this.skill[i]);
+            console.log('----------------');
+          },0);
+          console.log(i);
+        }
+      }
+    }
+    obj.say();
+    
+    /* 
+      期望得到下面的结果
+      1
+      2
+      3
+      No.1 jsCoder
+      es6
+      ----------------
+      No.2 jsCoder
+      react
+      ----------------
+      No.3 jsCoder
+      angular
+    */
+    ```
