@@ -1,0 +1,56 @@
+---
+title: JavaScript系列-变量提升
+date: 2022-07-04
+description: javascript 变量提升是怎么样的?
+defer: false
+tags: [JavaScript]
+---
+
+# 变量提升
+
+- Created: November 30, 2021 10:11 PM
+- Update: March 14, 2022 11:05 PM
+- 分类: JavaScript
+- 可参考文章: 
+    - https://github.com/mqyqingfeng/Blog/issues/5
+    - https://ui.dev/ultimate-guide-to-execution-contexts-hoisting-scopes-and-closures-in-javascript/?spm=ata.13261165.0.0.2d8e16798YR8lw
+    - https://blog.poetries.top/browser-working-principle/guide/part2/lesson07.html#%E6%80%BB%E7%BB%93
+    - https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/var
+- 学习状态: Yes
+- 学习进度: 已复习
+- 模块: 前端基础
+
+# 函数上下文
+
+活动对象（变量对象）activation object 
+
+在执行上下文激活后，可以使用
+
+变量对象的创建过程就介绍完了，让我们简洁的总结我们上述所说：
+
+1. 全局上下文的变量对象初始化是全局对象
+2. 函数上下文的变量对象初始化只包括 Arguments 对象
+3. 在进入执行上下文时会给变量对象添加形参、函数声明、变量声明等初始的属性值
+4. 在代码执行阶段，会再次修改变量对象的属性值
+
+执行上下文的生命周期包括三个阶段：创建阶段→执行阶段→回收阶段
+
+**1.创建阶段**当函数被调用，但未执行任何其内部代码之前，会做以下三件事：
+
+1. 创建变量对象：首先初始化函数的参数arguments，提升函数声明和变量声明。
+2. 创建作用域链（Scope Chain）：在执行期上下文的创建阶段，作用域链是在变量对象之后创建的。作用域链本身包含变量对象。作用域链用于解析变量。当被要求解析变量时，JavaScript 始终从代码嵌套的最内层开始，如果最内层没有找到变量，就会跳转到上一层父作用域中查找，直到找到该变量。
+3. 确定this指向
+4. 在一段 JS 脚本执行之前，要先解析代码（所以说 JS 是解释执行的脚本语言），解析的时候会先创建一个全局执行上下文环境，先把代码中即将执行的变量、函数声明都拿出来。变量先暂时赋值为undefined，函数则先声明好可使用。这一步做完了，然后再开始正式执行程序。
+
+另外，一个函数在执行之前，也会创建一个函数执行上下文环境，跟全局上下文差不多，不过 函数执行上下文中会多出this arguments和函数的参数。
+
+# 变量对象定义
+
+**所谓的变量提升，是指在JavaScript代码执行过程中，JavaScript引擎把变量的声明部分和函数的声明部分提升到代码开头的“行为”。变量被提升后，会给变量设置默认值，这个默认值就是我们熟悉的undefined**。
+
+编译-执行-回收
+
+# 变量提升总结
+
+- JavaScript代码执行过程中，需要先做变量提升，而之所以需要实现变量提升，是因为JavaScript代码在执行之前需要先编译。 在编译阶段，变量和函数会被存放到变量环境中，变量的默认值会被设置为undefined；在代码执行阶段，JavaScript引擎会从变量环境中去查找自定义的变量和函数
+- 如果在编译阶段，存在两个相同的函数，那么最终存放在变量环境中的是最后定义的那个，这是因为后定义的会覆盖掉之前定义的

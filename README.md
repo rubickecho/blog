@@ -21,7 +21,7 @@
 
 Hi!
 
-I'm PeakCool, 前端工程狮, 喜欢目前我所做的一切.
+I'm PeakCool, 现在专注前端开发, 喜欢目前我所做的一切.
 
 这里是 [我的博客](https://blog.peakcool.cn), 我会和大家分享我热爱的东西.
 
