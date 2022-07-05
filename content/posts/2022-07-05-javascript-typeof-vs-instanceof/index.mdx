@@ -1,0 +1,130 @@
+---
+title: JavaScript系列-typeof vs instanceof
+date: 2022-07-05
+description: instanceof 检查构造函数的prototype是否出现在某个实例对象的原型链上, typeof 返回一个字符串，表示未经计算的操作数的类型
+defer: false
+tags: [JavaScript]
+---
+
+# instanceof 和 typeof
+
+- Created: November 30, 2021 10:11 PM
+- Update: March 14, 2022 11:17 PM
+- 分类: JavaScript
+- 可参考文章: 
+    - https://juejin.cn/post/6844903613584654344
+    - http://jartto.wang/2019/01/17/js-typeof/
+    - https://zh.javascript.info/instanceof
+- 学习状态: Yes
+- 学习进度: 已复习
+- 模块: 前端基础
+
+# instanceof
+
+检查构造函数的prototype是否出现在某个实例对象的原型链上
+
+# typeof
+
+返回一个字符串，表示未经计算的操作数的类型
+
+```jsx
+(() => {
+	console.log("---------typeof start---------");
+
+	// 基本类型
+	console.log(typeof 1); // number
+	console.log(typeof false); // boolean
+	console.log(typeof "hello"); // string
+
+	// 引用类型
+	console.log(typeof { name: "Tom" }); // object
+	console.log(typeof [1, 2, 3]); // object
+
+	// function
+	console.log(typeof function () {}); // function
+
+	// null
+	console.log(typeof null); // object
+
+	// undefined
+	console.log(typeof test); // undefined
+	console.log(typeof undefined); // undefined
+
+    // symbol
+    console.log(typeof Symbol()); // symbol
+
+	console.log("---------typeof end---------");
+	console.log("---------instance start---------");
+
+	// 基本类型
+	console.log(1 instanceof Number); // false
+
+	// 引用类型
+	console.log({ name: "Tom" } instanceof Object); // true
+
+	// null
+	console.log(null instanceof Object); // false
+
+  // symbol
+  console.log(Symbol() instanceof Symbol); // false
+
+	// function
+	console.log(function () {} instanceof Function); // true
+	console.log(function () {} instanceof Object); // true
+	console.log(Array instanceof Function); // true
+	console.log(Array instanceof Object); // true
+
+	// 继承
+	function Parent() {}
+	function Child() {}
+	function Demo() {}
+
+	Child.prototype = new Parent();
+	var child = new Child();
+
+	console.log(child instanceof Child); // true
+	console.log(child instanceof Parent); // true
+	console.log(child instanceof Object); // true
+	console.log(child instanceof Demo); // false
+	console.log("---------instance end---------");
+
+	function A() {}
+	function B() {}
+
+	A.prototype = B.prototype = {};
+
+	let a = new A();
+
+	console.log(a instanceof B);
+})();
+```
+
+# 面试可能问?
+
+- 下面代码输出什么?
+    
+    ```jsx
+    function A() {}
+    function B() {}
+    
+    A.prototype = B.prototype = {};
+    
+    let a = new A();
+    
+    alert( a instanceof B );
+    
+    // true，但是 a 不是由 b 生成的
+    ```
+    
+- 动手实现 instanceof?
+    
+    * [Day225:介绍 instanceof 原理并实现 · Issue #1044 · lgwebdream/FE-Interview](https://github.com/lgwebdream/FE-Interview/issues/1044)
+    
+    核心代码
+    
+    ```jsx
+    if 
+    left.__proto__ = right.prototype
+    else
+    left = left.__proto__;
+    ```
