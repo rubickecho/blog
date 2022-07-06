@@ -1,0 +1,61 @@
+---
+title: JavaScript系列-apply vs call
+date: 2022-07-06
+description: call, apply 会立即执行函数， bind 会在下次执行时看情况使用绑定的 this
+defer: false
+tags: [JavaScript]
+---
+
+# apply 和 call
+
+- Created: November 30, 2021 10:12 PM
+- Update: March 14, 2022 11:31 PM
+- 分类: JavaScript
+- 可参考文章: 
+    - https://github.com/mqyqingfeng/Blog/issues/11
+    - https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/apply
+- 学习状态: Yes
+- 学习进度: 已复习
+- 模块: 前端基础
+
+# call()
+
+## call() 是什么?
+
+调用一个传入给定this和参数的方法
+
+> **注意：**call()方法的作用和 apply() 方法类似，区别就是`call()`方法接受的是**参数列表**，而`apply()`方法接受的是**一个参数数组**。
+> 
+
+```jsx
+fn.call(thisArg, arg1, arg2, argN)
+```
+
+## 模拟实现call
+
+[code-for-freedom/index.js at master · peakcool/code-for-freedom](https://github.com/peakcool/code-for-freedom/blob/master/src/call/index.js)
+
+# apply()
+
+## apply() 是什么？
+
+调用一个传入给定this和参数的方法，和call作用一样，不同的是传入参数为数组或类数组对象
+
+```jsx
+// 语法
+fn.apply(thisArg, [argsArray])
+```
+
+## 模拟实现apply
+
+[code-for-freedom/index.js at master · peakcool/code-for-freedom](https://github.com/peakcool/code-for-freedom/blob/master/src/apply/index.js)
+
+# 面试可能问?
+
+- 下面代码输出结果?
+    
+    ```jsx
+    [].copyWithin.call({ length: 5, 3: 1 }, 0, 3)
+    
+    // { '0': 1, '3': 1, length: 5 }
+    ```

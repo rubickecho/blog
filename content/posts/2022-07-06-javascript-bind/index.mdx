@@ -1,0 +1,107 @@
+---
+title: JavaScript系列-bind 的实现
+date: 2022-07-06
+description: call, apply 会立即执行函数， bind 会在下次执行时看情况使用绑定的 this
+defer: false
+tags: [JavaScript]
+---
+
+# bind 的实现
+
+- Created: November 30, 2021 10:12 PM
+- Update: March 14, 2022 11:20 PM
+- 分类: JavaScript
+- 可参考文章: 
+    - https://github.com/mqyqingfeng/Blog/issues/12
+    - https://stackoverflow.com/questions/15455009/javascript-call-apply-vs-bind
+- 学习状态: Yes
+- 学习进度: 已复习
+- 模块: 前端基础
+
+# bind 的作用是什么?
+
+返回一个新函数，为传入函数指定 this，并在下次调用时生效
+
+bind 时可以传参数，和执行时参数一起生效
+
+当新函数作为构造函数时，之前的 this 失效
+
+# bind，call，apply有什么区别？
+
+三个都会指定 this
+
+call, apply 会立即执行函数， bind 会在下次执行时看情况使用绑定的 this
+
+[Javascript: call(), apply() and bind()](https://medium.com/@omergoldberg/javascript-call-apply-and-bind-e5c27301f7bb)
+
+# 手动实现 bind
+
+```jsx
+(() => {
+    function user(habit, height) {
+        this.name = 'tom';
+
+        // console.log('this.name:', this.name);
+        // console.log('this.age:', this.age);
+        // console.log('habit:', habit);
+        return {
+            name: this.name,
+            age: this.age,
+            habit: habit,
+            height: height
+        }
+    }
+
+    const obj = {
+        name: 'jack',
+        age: 20,
+    }
+
+    // 返回一个新函数
+    const newUser = user.bind(obj, 'run'); 
+    console.log('newUser:', newUser(180));
+
+    Function.prototype.bind2 = function(context) {
+        const _this = this;
+        const bindArgs = Array.prototype.slice.call(arguments, 1);
+        const boundFn = function() {
+            const args = Array.prototype.slice.call(arguments);
+            // 参数可能有返回值
+            // 两种途径传参时，合并参数
+            return _this.apply(this instanceof boundFn ? this : context, [...bindArgs, ...args]); 
+        }
+        // 将原函数的原型指向boundFn的原型，这样在修改 boundfn 的原型时，原函数的原型也不会跟着修改
+        var fn = function() {}
+        // 修改返回函数的 prototype 为绑定函数的 prototype，实例就可以继承绑定函数的原型中的值
+        fn.prototype = _this.prototype;
+        boundFn.prototype = new fn();
+        return boundFn;
+    }
+
+    const newUser2 = user.bind2(obj, 'run'); 
+    console.log('newUser2:', newUser2(180));
+
+    console.log('new newUser2:', new newUser2(170));
+})()
+```
+
+# 面试可能问?
+
+- **[实现Function 原型的bind方法，使得以下程序最后能输出“success”](https://github.com/lgwebdream/FE-Interview/issues/863)**
+- **[bind、call、apply 的区别](https://github.com/lgwebdream/FE-Interview/issues/495)**
+    
+    * bind 指定上下文，返回函数，并在下次执行时生效
+    
+    call, apply 指定上下文并立即执行，不同的是传入参数类型不同
+    
+- 下面代码输出什么，并解释原因?
+    
+    ```jsx
+    const person = { name: "yideng" };
+    
+    function sayHi(age) {
+      return `${this.name} is ${age}`;
+    }
+    console.log(sayHi.call(person, 21));
+    console.log(sayHi.bind(person, 21));
+    ```
