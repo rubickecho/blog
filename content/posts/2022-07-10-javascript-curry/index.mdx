@@ -1,0 +1,132 @@
+---
+title: JavaScript系列-函数柯里化
+date: 2022-07-10
+description: 一个函数多个参数，多个函数一个参数，一部分一部分的处理逻辑
+defer: false
+tags: [JavaScript]
+---
+
+# 函数柯里化
+
+- Created: November 30, 2021 10:12 PM
+- Update: March 14, 2022 11:46 PM
+- 分类: JavaScript
+- 可参考文章: 
+    - https://github.com/mqyqingfeng/Blog/issues/42
+    - https://zhuanlan.zhihu.com/p/120735088
+    - https://javascript.info/currying-partials
+- 学习状态: Yes
+- 学习进度: 已复习
+- 模块: 前端基础
+
+# 什么是函数柯里化?
+
+一个函数多个参数，多个函数一个参数，一部分一部分的处理逻辑
+
+> 在数学和计算机科学中，柯里化是一种将使用多个参数的一个函数转换成一系列使用一个参数的函数的技术——wiki
+> 
+
+```jsx
+function add(a, b) {
+    return a + b;
+}
+
+// 执行 add 函数，一次传入两个参数即可
+add(1, 2) // 3
+
+// 假设有一个 curry 函数可以做到柯里化
+var addCurry = curry(add);
+addCurry(1)(2) // 3
+```
+
+# 函数柯里化有什么作用?
+
+- 简化函数调用，即保证函数正常调用，也能在参数不全时，得到部分函数，方便后续处理
+- 功能划分更明确，更容易维护和不易出错
+
+> *Currying* is a transform that makes `f(a,b,c)` callable as `f(a)(b)(c)`. JavaScript implementations usually both keep the function callable normally and return the partial if the arguments count is not enough.
+> 
+
+# 函数柯里化实现
+
+```jsx
+/**
+ * 函数柯里化
+ */
+(() => {
+    const curry = function(fn) {
+        const arity = fn.length; // 获取参数个数 Function.length
+
+        return function $curry(...args) {
+            console.log('args:', args);
+            if (args.length === arity) {
+                return fn.apply(this, args);
+            } else {
+                return function(...args2) {
+                    return $curry.apply(this, args.concat(args2));
+                }
+            }
+        }
+    }
+
+    const test = function(a, b, c) {
+        return a + b + c;
+    }
+
+    const curriedTest = curry(test);
+    const result = curriedTest(1)(2)(3);
+    console.log('result:', result);
+    
+    const result2 = curriedTest(1)(2, 3);
+    console.log('result2:', result2);
+})();
+
+/**
+ * args: (1) [1]
+ * args: (2) [1, 2]
+ * args: (3) [1, 2, 3]
+ * result: 6
+ * args: (1) [1]
+ * args: (3) [1, 2, 3]
+ * result2: 6
+ */
+```
+
+# 面试可能问？
+
+- **[Day264:请实现 uncurring 完成函数柯里化](https://github.com/lgwebdream/FE-Interview/issues/1084)**
+    - 答案
+        
+        ```jsx
+        Function.prototype.uncurring = function() {
+            var fn = this; // 等于 Array.prototype.push()
+            return function $uncurring() {
+                var args = Array.prototype.shift.call(arguments); // 获取到首个参数 array
+                // 此时 arguments 只剩下 4
+                console.log('arguments:', arguments);
+        
+                // 合并数组 等同于 [1, 2, 3].push(4)
+                fn.apply(args, arguments);
+            }
+        }
+        
+        var yideng = Array.prototype.push.uncurring();
+        (function () {
+            // arguments = [1, 2, 3]
+          yideng(arguments, 4);
+          console.log(arguments); // [1,2,3,4]
+        })(1, 2, 3);
+        ```
+        
+    
+        ```jsx
+        var yideng = Array.prototype.push.uncurring();
+        (function () {
+        yideng(arguments, 4);
+        console.log(arguments); // [1,2,3,4]
+        })(1, 2, 3);
+        ```
+    
+- **[第57天 写一个方法，使得sum(x)(y)和sum(x,y)返回的结果相同](https://github.com/haizlin/fe-interview/issues/238)**
+    
+    * 即函数柯里化

@@ -1,0 +1,92 @@
+---
+title: JavaScript系列-new 操作符
+date: 2022-07-10
+description: 
+defer: false
+tags: [JavaScript]
+---
+
+# new操作符
+
+- Created: November 30, 2021 10:13 PM
+- Update: March 14, 2022 11:52 PM
+- 分类: JavaScript
+- 学习状态: Yes
+- 学习进度: 已复习
+- 模块: 前端基础
+
+# new 的作用？
+
+- 访问构造函数内部属性（fn）
+- 访问构造函数原型属性（fun.prototype）
+- 返回函数执行结果
+
+核心，参考经典继承
+
+fn.apply( obj, arguments ) 访问函数内部属性
+
+Object.setPrototypeOf( obj, arguments ) 访问函数原型属性
+
+# 动手实现 new
+
+```jsx
+(() => {
+    function mockNew() {
+        const obj = new Object();
+        const fnContructor = [].shift.call(arguments); // 获取构造函数
+        // obj.setPrototypeOf(fnContructor.prototype);
+
+        // 重点1 将构造函数的原型指向对象，让对象可以访问其原型上属性
+        obj.__proto__ = fnContructor.prototype;
+
+        // 重点2 经典继承，将构造函数上属性复制到对象上
+        const res = fnContructor.apply(obj, arguments);
+
+        // 重点3 构造函数有执行结果，返回结果，否则返回对象
+        return typeof res === 'object' ? res : obj;
+    }
+
+    function user() {
+        this.name = "tom";
+        this.age = 18;
+
+        // 返回对象时
+        return {
+            name: this.name,
+            age: this.age,
+            habit: 'eat'
+        }
+
+        // 返回基本类型时
+        // return 'hello world';
+    }
+
+    user.prototype.getName = function() {
+        return this.name;
+    }
+
+    const newUser = mockNew(user);
+
+    console.log('newUser', newUser);
+    console.log('user.name', newUser.name);
+    console.log('user.age', newUser.age);
+    console.log('user.habit', newUser.habit);
+    console.log('user.getName', newUser.getName());
+
+    const _user = new user();
+    console.log('_user.habit', _user.habit);
+    console.log('_user.name', _user.name);
+    console.log('_user.getName', _user.getName());
+})()
+```
+
+# 面试可能问？
+
+- 说说new操作符的执行过程？
+    
+    
+- 使用new一个构造函数，如果函数返回return 1、return {}、return null、return true会发生什么情况？
+    
+    有返回值，且返回值不为对象时，返回 this 对象
+    
+    返回值为对象时，直接返回对象
