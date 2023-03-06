@@ -1,0 +1,59 @@
+---
+title: Vue学习系列-What is Key
+date: 2023-03-06
+description: 什么是 Vue Component Key，为什么要使用 Key，如何使用 Key
+defer: false
+tags: [Vue]
+---
+
+# key 的原理
+
+- Created: February 10, 2022 9:52 PM
+- Update: March 20, 2022 10:28 PM
+- 分类: Vue
+- 学习状态: Yes
+- 学习进度: 复习中
+- 模块: 开发框架
+
+```jsx
+// 源码位置 src/core/vdom/patch.js
+
+function sameVnode (a, b) {
+  return (
+    a.key === b.key && (
+      (
+        a.tag === b.tag &&
+        a.isComment === b.isComment &&
+        isDef(a.data) === isDef(b.data) &&
+        sameInputType(a, b)
+      ) || (
+        isTrue(a.isAsyncPlaceholder) &&
+        a.asyncFactory === b.asyncFactory &&
+        isUndef(b.asyncFactory.error)
+      )
+    )
+  )
+}
+```
+
+在 vnode patch 逻辑中，检查节点是否一样，可以快速通过 key 检查，如果相等，则不在进行深层次的检查，这样提升效率和性能
+
+# 最佳实践
+
+## 表渲染设置属性 key
+
+比如 v-for ，这样子节点对比可以提升效率，除非遍历输出的 DOM 内容非常简单，或者是刻意依赖默认行为以获取性能上的提升
+
+## 在 v-if/v-if-else/v-else 中使用 key
+
+当判断逻辑中是相同标签节点时，建议设置属性 key
+
+这样在 vnode patch 中，会直接根据 key 的不同，认为是两个不同的节点，直接删除旧节点，在原来的节点新增新节点
+
+如果不设置，可能出现副作用，因为默认行为是修补旧节点，然后在新位置新增节点，这是可能出现意料之外的情况
+
+比如？
+
+# 面试可能问?
+
+- **[面试官：你知道vue中key的原理吗？说说你对它的理解？](https://github.com/febobo/web-interview/issues/18)**
