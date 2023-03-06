@@ -34,7 +34,7 @@ tags: ["Node"]
 
 在V8中，主要将内存分为新生代和老生代两代。新生代中的对象为存活时间较短的对象，老生代中的对象为存活时间较长或常驻内存的对象。
 
-![分代](https://github.com/peakcool/learn-nodejs-notes/blob/08958d35532ad8ea5fc78a3c2411f4fcc505ffa6/%E7%A4%BA%E6%84%8F%E5%9B%BE/V8%E5%88%86%E4%BB%A3%E7%A4%BA%E6%84%8F%E5%9B%BE.png?raw=true)
+![分代](https://github.com/rubickecho/learn-nodejs-notes/blob/08958d35532ad8ea5fc78a3c2411f4fcc505ffa6/%E7%A4%BA%E6%84%8F%E5%9B%BE/V8%E5%88%86%E4%BB%A3%E7%A4%BA%E6%84%8F%E5%9B%BE.png?raw=true)
 
 --
 
@@ -48,7 +48,7 @@ tags: ["Node"]
 
 `Scavenge`缺点是只能使用堆内存的一般，这是由划分空间和复制机制所决定的。但是Scavenge只复制存活的对象，并且对于声明周期短的场景存活对象占很少部分，所以他在时间效率上有优异的表现，它是典型的牺牲空间换取时间的算法。所以在新生代中尤为合适。
 
-![新生代堆内存](https://github.com/peakcool/learn-nodejs-notes/blob/08958d35532ad8ea5fc78a3c2411f4fcc505ffa6/%E7%A4%BA%E6%84%8F%E5%9B%BE/V8%E5%A0%86%E5%86%85%E5%AD%98%E7%A4%BA%E6%84%8F%E5%9B%BE.png?raw=true)
+![新生代堆内存](https://github.com/rubickecho/learn-nodejs-notes/blob/08958d35532ad8ea5fc78a3c2411f4fcc505ffa6/%E7%A4%BA%E6%84%8F%E5%9B%BE/V8%E5%A0%86%E5%86%85%E5%AD%98%E7%A4%BA%E6%84%8F%E5%9B%BE.png?raw=true)
 
 ---
 
@@ -63,7 +63,7 @@ tags: ["Node"]
 
 Mark-Sweep: 标记清除算法，它分为标记和清除两个阶段。
 
-![Mark-Sweep](https://github.com/peakcool/learn-nodejs-notes/blob/08958d35532ad8ea5fc78a3c2411f4fcc505ffa6/%E7%A4%BA%E6%84%8F%E5%9B%BE/Mark-Sweep%E5%9C%A8%E8%80%81%E7%94%9F%E4%BB%A3%E7%A9%BA%E9%97%B4%E4%B8%AD%E6%A0%87%E8%AE%B0%E5%90%8E%E7%A4%BA%E6%84%8F%E5%9B%BE.png?raw=true)
+![Mark-Sweep](https://github.com/rubickecho/learn-nodejs-notes/blob/08958d35532ad8ea5fc78a3c2411f4fcc505ffa6/%E7%A4%BA%E6%84%8F%E5%9B%BE/Mark-Sweep%E5%9C%A8%E8%80%81%E7%94%9F%E4%BB%A3%E7%A9%BA%E9%97%B4%E4%B8%AD%E6%A0%87%E8%AE%B0%E5%90%8E%E7%A4%BA%E6%84%8F%E5%9B%BE.png?raw=true)
 
 ---
 
@@ -71,7 +71,7 @@ Mark-Sweep: 标记清除算法，它分为标记和清除两个阶段。
 
 所以为了解决这个问题，结合`Mark-Compact`，标记整理对象标记死亡后的碎片化空间。
 
-![Mark-Compact](https://github.com/peakcool/learn-nodejs-notes/blob/08958d35532ad8ea5fc78a3c2411f4fcc505ffa6/%E7%A4%BA%E6%84%8F%E5%9B%BE/Mark-Compact%E6%95%B4%E7%90%86%E7%A2%8E%E7%89%87%E7%A4%BA%E6%84%8F%E5%9B%BE.png?raw=true)
+![Mark-Compact](https://github.com/rubickecho/learn-nodejs-notes/blob/08958d35532ad8ea5fc78a3c2411f4fcc505ffa6/%E7%A4%BA%E6%84%8F%E5%9B%BE/Mark-Compact%E6%95%B4%E7%90%86%E7%A2%8E%E7%89%87%E7%A4%BA%E6%84%8F%E5%9B%BE.png?raw=true)
 
 ---
 

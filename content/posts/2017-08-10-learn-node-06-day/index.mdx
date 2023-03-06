@@ -137,11 +137,11 @@ UDP套接字事件只是一个EventEmitter的实例，具备如下自定义事�
 
 **http模块即是将`connection`到`request`的过程进行了封装**
 
-![`connection`到`request`的过程进行封装](https://github.com/peakcool/learn-nodejs-notes/blob/master/%E7%A4%BA%E6%84%8F%E5%9B%BE/%60connection%60%E5%88%B0%60request%60%E7%9A%84%E8%BF%87%E7%A8%8B%E8%BF%9B%E8%A1%8C%E5%B0%81%E8%A3%85.png?raw=true)
+![`connection`到`request`的过程进行封装](https://github.com/rubickecho/learn-nodejs-notes/blob/master/%E7%A4%BA%E6%84%8F%E5%9B%BE/%60connection%60%E5%88%B0%60request%60%E7%9A%84%E8%BF%87%E7%A8%8B%E8%BF%9B%E8%A1%8C%E5%B0%81%E8%A3%85.png?raw=true)
 
 除此之外，http模块将连接所用套接字的读写抽象为`ServerRequest`和`ServerResponse`对象，它们分别对应请求和响应操作。在请求产生的过程中，http模块拿到连接中传来的数据，调用二进制模块`http_parser`进行解析，解析完请求报文的报头后，触发`request`事件，调用用户业务逻辑。
 
-![http模块产生请求的流程](https://github.com/peakcool/learn-nodejs-notes/blob/master/%E7%A4%BA%E6%84%8F%E5%9B%BE/http%E6%A8%A1%E5%9D%97%E4%BA%A7%E7%94%9F%E8%AF%B7%E6%B1%82%E7%9A%84%E6%B5%81%E7%A8%8B.png?raw=true)
+![http模块产生请求的流程](https://github.com/rubickecho/learn-nodejs-notes/blob/master/%E7%A4%BA%E6%84%8F%E5%9B%BE/http%E6%A8%A1%E5%9D%97%E4%BA%A7%E7%94%9F%E8%AF%B7%E6%B1%82%E7%9A%84%E6%B5%81%E7%A8%8B.png?raw=true)
 
 ##### http请求
 
@@ -213,7 +213,7 @@ HTTP客户端的响应对象与服务器相似，在`ClientRequest`对象中，�
 ##### http代理
 
 **HTTP代理对服务器端创建的连接进行管理**
-![HTTP代理对服务器端创建的连接进行管理](https://github.com/peakcool/learn-nodejs-notes/blob/master/%E7%A4%BA%E6%84%8F%E5%9B%BE/HTTP%E4%BB%A3%E7%90%86%E5%AF%B9%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AB%AF%E5%88%9B%E5%BB%BA%E7%9A%84%E8%BF%9E%E6%8E%A5%E8%BF%9B%E8%A1%8C%E7%AE%A1%E7%90%86.png?raw=true)
+![HTTP代理对服务器端创建的连接进行管理](https://github.com/rubickecho/learn-nodejs-notes/blob/master/%E7%A4%BA%E6%84%8F%E5%9B%BE/HTTP%E4%BB%A3%E7%90%86%E5%AF%B9%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AB%AF%E5%88%9B%E5%BB%BA%E7%9A%84%E8%BF%9E%E6%8E%A5%E8%BF%9B%E8%A1%8C%E7%AE%A1%E7%90%86.png?raw=true)
 
 调用HTTP客户端同时对一个服务器发起10次HTTP请求时，其实质只有5个请求处于并发状态，后续的请求需要等待某个请求完成服务后才真正发出。这与浏览器对同一个域名下有下载连接数的限制是相同的行为。如需改变，可以在`option`中传递`agent`选项。
 

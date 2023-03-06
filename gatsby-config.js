@@ -8,13 +8,13 @@ module.exports = {
     // You can also add new values here to query them like usual
     // See all options: https://github.com/LekoArts/gatsby-themes/blob/main/themes/gatsby-theme-minimal-blog/gatsby-config.js
     siteTitle: `24 Hours`,
-    siteTitleAlt: `24 Hours - PeakCool's Blog`,
-    siteHeadline: `24 Hours - PeakCool's Blog`,
-    siteUrl: `https://blog.peakcool.cn`,
+    siteTitleAlt: `24 Hours - rubickecho's Blog`,
+    siteHeadline: `24 Hours - rubickecho's Blog`,
+    siteUrl: `https://blog.rubickecho.com`,
     siteDescription: `24 Hours, Every day is a new day`,
     siteLanguage: `zh-CN`,
     siteImage: `/banner.jpg`,
-    author: `@peakcool`,
+    author: `@rubickecho`,
   },
   plugins: [
     {
@@ -38,7 +38,7 @@ module.exports = {
           },
           {
             name: `Homepage`,
-            url: `https://blog.peakcool.cn`,
+            url: `https://blog.rubickecho.com`,
           },
         ],
       },
@@ -62,9 +62,9 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `24-hours - peakcool' blog`,
+        name: `24-hours - rubickecho' blog`,
         short_name: `24 Hours`,
-        description: `24-hours - peakcool' blog`,
+        description: `24-hours - rubickecho' blog`,
         start_url: `/`,
         background_color: `#fff`,
         // This will impact how browsers show your PWA/website
@@ -129,7 +129,7 @@ module.exports = {
               }
             `,
             output: `rss.xml`,
-            title: `24 Hours - PeakCool's Blog`,
+            title: `24 Hours - rubickecho's Blog`,
           },
         ],
       },
